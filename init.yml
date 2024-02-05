@@ -1,0 +1,11 @@
+---
+- hosts: localhost
+  become: true
+  pre_tasks:
+    - name: Update cache
+      apt:
+        update_cache: true
+
+  tasks:
+    - include: ./terminal.yml
+    - include: ./node.yml

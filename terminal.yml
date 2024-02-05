@@ -1,0 +1,31 @@
+- name: Install zsh
+  apt:
+    name: zsh
+    state: present
+
+- name: Install oh-my-zsh
+  script:
+    src: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+    creates: ~/.oh-my-zsh
+
+- name: Install zsh plugins (autosuggestions & syntax highlighting)
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: "{{ lookup('env', 'ZSH_CUSTOM') | default('~/.oh-my-zsh/custom') }}/plugins/zsh-autosuggestions"
+    update: yes
+
+- name: Install zsh plugin zsh-syntax-highlighting
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ lookup('env', 'ZSH_CUSTOM') | default('~/.oh-my-zsh/custom') }}/plugins/zsh-syntax-highlighting"
+    update: yes
+
+- name: Install you-should-use plugin (optional)
+  git:
+    repo: https://github.com/MichaelAquilina/zsh-you-should-use.git
+    dest: "{{ lookup('env', 'ZSH_CUSTOM') | default('~/.oh-my-zsh/custom') }}/plugins/you-should-use"
+    update: yes
+
+- name: Reload zsh configuration (if already installed)
+  command: source ~/.zshrc
+  ignore_errors: yes
